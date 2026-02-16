@@ -10,7 +10,81 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export interface _SERVICE {}
+export type Category = { 'preparedMeals' : null } |
+  { 'other' : null } |
+  { 'bakery' : null } |
+  { 'meatFish' : null } |
+  { 'fruitsVegetables' : null } |
+  { 'frozen' : null } |
+  { 'beverages' : null } |
+  { 'dairy' : null } |
+  { 'pantry' : null };
+export interface FoodDonationPost {
+  'id' : PostId,
+  'title' : string,
+  'expiryDate' : string,
+  'createdAt' : bigint,
+  'recipientContact' : [] | [string],
+  'accessCode' : [] | [string],
+  'description' : string,
+  'state' : string,
+  'ngoId' : [] | [Principal],
+  'pickupTime' : string,
+  'quantity' : bigint,
+  'category' : Category,
+  'pickupStatus' : PickupStatus,
+  'image' : string,
+  'recipientName' : [] | [string],
+  'donor' : Principal,
+  'location' : string,
+  'recipientId' : [] | [Principal],
+  'foodType' : string,
+}
+export type PickupStatus = { 'booked' : null } |
+  { 'available' : null } |
+  { 'pickedUp' : null } |
+  { 'delivered' : null };
+export type PostId = bigint;
+export interface TrackingStep {
+  'status' : string,
+  'title' : string,
+  'timestamp' : bigint,
+}
+export interface UserProfile { 'name' : string }
+export type UserRole = { 'admin' : null } |
+  { 'user' : null } |
+  { 'guest' : null };
+export interface _SERVICE {
+  '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'createPost' : ActorMethod<
+    [
+      string,
+      string,
+      string,
+      string,
+      bigint,
+      string,
+      string,
+      string,
+      Category,
+      string,
+      [] | [Principal],
+    ],
+    FoodDonationPost
+  >,
+  'getAllPosts' : ActorMethod<[], Array<FoodDonationPost>>,
+  'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
+  'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getCurrentTracking' : ActorMethod<[], Array<TrackingStep>>,
+  'getHealthyListings' : ActorMethod<[], Array<FoodDonationPost>>,
+  'getMyPosts' : ActorMethod<[], Array<FoodDonationPost>>,
+  'getNearestListings' : ActorMethod<[], Array<FoodDonationPost>>,
+  'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'getVegListings' : ActorMethod<[], Array<FoodDonationPost>>,
+  'isCallerAdmin' : ActorMethod<[], boolean>,
+  'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
+}
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];
 export declare const idlFactory: IDL.InterfaceFactory;

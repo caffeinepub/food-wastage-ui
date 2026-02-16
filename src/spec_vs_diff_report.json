@@ -1,19 +1,84 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-16T18:58:58.502Z",
-  "summary": "The diff implements a new /track route and wires the NGO Alert Track button to navigate there, plus adds localStorage persistence (with hydration handling) for the food posts Zustand store to survive page refreshes.",
-  "missing_requirements": [],
-  "hallucinated_features": [],
-  "confidence": 0.83,
+  "generatedAt": "2026-02-16T19:11:12.831Z",
+  "summary": "Frontend wiring to backend actor + React Query and a cohesive earth-toned theme were implemented, but the backend persistence/tracking requirements are not evidenced as complete: posts are stored in a non-stable in-memory Map (no stable persistence shown), per-caller partitioning is not implemented as keyed storage, and required backend methods for “most recent post” and tracking status are not clearly present in the diff. Several unrequested features (access control/admin token URL parsing, user profiles, listings endpoints, migration stub) were added.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Persist food donation posts in stable backend state keyed by caller Principal (or equivalent per-user partitioning), and expose APIs to create/add, list for current caller, and fetch most recent post.",
+      "reason": "backend/main.mo shows posts stored in a plain in-memory Map and nextId var; no `stable` state is shown. Posts are keyed by PostId (Nat), not partitioned by caller Principal. Also, only `createPost` and `getMyPosts` are evidenced; no explicit backend method to fetch the most recent post is shown in the provided diff excerpt.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "requirement": "Backend provides a method to fetch tracking status for the most recent post (or by post id) returning ordered steps with completion state (or equivalent), and Track page uses it with clear fallback states.",
+      "reason": "Frontend calls `actor.getCurrentTracking()` and TrackPage renders based on returned steps with an empty fallback, but the diff summary for backend/main.mo does not evidence an implemented `getCurrentTracking` (or equivalent) method nor a tracking status data model tied to posts beyond type declarations.",
+      "evidence": [
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/TrackPage.tsx",
+        "backend/main.mo"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Added access control / authorization system initialization and admin secret token initialization via URL/session parameters.",
+      "reason": "BuildRequest did not ask for introducing custom authorization/admin-token flows; it only specified that third-party auth providers should not be added (Internet Identity only).",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/hooks/useActor.ts",
+        "frontend/src/utils/urlParams.ts"
+      ]
+    },
+    {
+      "description": "Added user profile APIs (get/save caller profile, get user profile).",
+      "reason": "User profile storage and APIs are not part of REQ-1/REQ-2/REQ-3/REQ-4.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Added additional backend listing endpoints (e.g., nearest listings / healthy listing).",
+      "reason": "BuildRequest only requested per-caller post creation/listing and most recent post + tracking; general listing endpoints were not requested.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Added a backend migration module stub.",
+      "reason": "No migration requirement was requested.",
+      "evidence": [
+        "backend/migration.mo",
+        "backend/main.mo"
+      ]
+    }
+  ],
+  "confidence": 0.74,
   "changed_files": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "frontend-file-summaries.txt",
     "frontend/src/App.tsx",
+    "frontend/src/components/add-food/forms/AddFoodCardForm.tsx",
+    "frontend/src/components/add-food/forms/AddFoodDrawerForm.tsx",
+    "frontend/src/components/add-food/forms/AddFoodWizardForm.tsx",
+    "frontend/src/components/layout/AppShell.tsx",
+    "frontend/src/components/layout/BottomNav.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/pages/AddFoodPage.tsx",
     "frontend/src/pages/HistoryPage.tsx",
+    "frontend/src/pages/HomePage.tsx",
     "frontend/src/pages/NgoAlertPage.tsx",
     "frontend/src/pages/TrackPage.tsx",
     "frontend/src/state/FoodPostsProvider.tsx",
     "frontend/src/state/foodPostsStore.ts",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
     "project_state.json"
   ]
 }

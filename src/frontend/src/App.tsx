@@ -1,5 +1,4 @@
 import { RouterProvider, createRouter, createRoute, createRootRoute } from '@tanstack/react-router';
-import { FoodPostsProvider } from './state/FoodPostsProvider';
 import AppShell from './components/layout/AppShell';
 import HomePage from './pages/HomePage';
 import AddFoodPage from './pages/AddFoodPage';
@@ -52,9 +51,5 @@ declare module '@tanstack/react-router' {
 }
 
 export default function App() {
-  return (
-    <FoodPostsProvider>
-      <RouterProvider router={router} />
-    </FoodPostsProvider>
-  );
+  return <RouterProvider router={router} />;
 }

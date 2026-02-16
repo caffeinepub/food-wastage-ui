@@ -89,10 +89,464 @@ export class ExternalBlob {
         return this;
     }
 }
-export interface backendInterface {
+export interface UserProfile {
+    name: string;
 }
+export type PostId = bigint;
+export interface TrackingStep {
+    status: string;
+    title: string;
+    timestamp: bigint;
+}
+export interface FoodDonationPost {
+    id: PostId;
+    title: string;
+    expiryDate: string;
+    createdAt: bigint;
+    recipientContact?: string;
+    accessCode?: string;
+    description: string;
+    state: string;
+    ngoId?: Principal;
+    pickupTime: string;
+    quantity: bigint;
+    category: Category;
+    pickupStatus: PickupStatus;
+    image: string;
+    recipientName?: string;
+    donor: Principal;
+    location: string;
+    recipientId?: Principal;
+    foodType: string;
+}
+export enum Category {
+    preparedMeals = "preparedMeals",
+    other = "other",
+    bakery = "bakery",
+    meatFish = "meatFish",
+    fruitsVegetables = "fruitsVegetables",
+    frozen = "frozen",
+    beverages = "beverages",
+    dairy = "dairy",
+    pantry = "pantry"
+}
+export enum PickupStatus {
+    booked = "booked",
+    available = "available",
+    pickedUp = "pickedUp",
+    delivered = "delivered"
+}
+export enum UserRole {
+    admin = "admin",
+    user = "user",
+    guest = "guest"
+}
+export interface backendInterface {
+    _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
+    assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    createPost(title: string, location: string, foodType: string, state: string, quantity: bigint, expiryDate: string, pickupTime: string, image: string, category: Category, description: string, ngoId: Principal | null): Promise<FoodDonationPost>;
+    getAllPosts(): Promise<Array<FoodDonationPost>>;
+    getCallerUserProfile(): Promise<UserProfile | null>;
+    getCallerUserRole(): Promise<UserRole>;
+    getCurrentTracking(): Promise<Array<TrackingStep>>;
+    getHealthyListings(): Promise<Array<FoodDonationPost>>;
+    getMyPosts(): Promise<Array<FoodDonationPost>>;
+    getNearestListings(): Promise<Array<FoodDonationPost>>;
+    getUserProfile(user: Principal): Promise<UserProfile | null>;
+    getVegListings(): Promise<Array<FoodDonationPost>>;
+    isCallerAdmin(): Promise<boolean>;
+    saveCallerUserProfile(profile: UserProfile): Promise<void>;
+}
+import type { Category as _Category, FoodDonationPost as _FoodDonationPost, PickupStatus as _PickupStatus, PostId as _PostId, UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
+    async _initializeAccessControlWithSecret(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor._initializeAccessControlWithSecret(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor._initializeAccessControlWithSecret(arg0);
+            return result;
+        }
+    }
+    async assignCallerUserRole(arg0: Principal, arg1: UserRole): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+            return result;
+        }
+    }
+    async createPost(arg0: string, arg1: string, arg2: string, arg3: string, arg4: bigint, arg5: string, arg6: string, arg7: string, arg8: Category, arg9: string, arg10: Principal | null): Promise<FoodDonationPost> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createPost(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, to_candid_Category_n3(this._uploadFile, this._downloadFile, arg8), arg9, to_candid_opt_n5(this._uploadFile, this._downloadFile, arg10));
+                return from_candid_FoodDonationPost_n6(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createPost(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, to_candid_Category_n3(this._uploadFile, this._downloadFile, arg8), arg9, to_candid_opt_n5(this._uploadFile, this._downloadFile, arg10));
+            return from_candid_FoodDonationPost_n6(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getAllPosts(): Promise<Array<FoodDonationPost>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getAllPosts();
+                return from_candid_vec_n14(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getAllPosts();
+            return from_candid_vec_n14(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getCallerUserProfile(): Promise<UserProfile | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCallerUserProfile();
+                return from_candid_opt_n15(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCallerUserProfile();
+            return from_candid_opt_n15(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getCallerUserRole(): Promise<UserRole> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCallerUserRole();
+                return from_candid_UserRole_n16(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCallerUserRole();
+            return from_candid_UserRole_n16(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getCurrentTracking(): Promise<Array<TrackingStep>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCurrentTracking();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCurrentTracking();
+            return result;
+        }
+    }
+    async getHealthyListings(): Promise<Array<FoodDonationPost>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getHealthyListings();
+                return from_candid_vec_n14(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getHealthyListings();
+            return from_candid_vec_n14(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getMyPosts(): Promise<Array<FoodDonationPost>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getMyPosts();
+                return from_candid_vec_n14(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getMyPosts();
+            return from_candid_vec_n14(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getNearestListings(): Promise<Array<FoodDonationPost>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getNearestListings();
+                return from_candid_vec_n14(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getNearestListings();
+            return from_candid_vec_n14(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getUserProfile(arg0: Principal): Promise<UserProfile | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getUserProfile(arg0);
+                return from_candid_opt_n15(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getUserProfile(arg0);
+            return from_candid_opt_n15(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getVegListings(): Promise<Array<FoodDonationPost>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getVegListings();
+                return from_candid_vec_n14(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getVegListings();
+            return from_candid_vec_n14(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async isCallerAdmin(): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.isCallerAdmin();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.isCallerAdmin();
+            return result;
+        }
+    }
+    async saveCallerUserProfile(arg0: UserProfile): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.saveCallerUserProfile(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.saveCallerUserProfile(arg0);
+            return result;
+        }
+    }
+}
+function from_candid_Category_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Category): Category {
+    return from_candid_variant_n11(_uploadFile, _downloadFile, value);
+}
+function from_candid_FoodDonationPost_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _FoodDonationPost): FoodDonationPost {
+    return from_candid_record_n7(_uploadFile, _downloadFile, value);
+}
+function from_candid_PickupStatus_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _PickupStatus): PickupStatus {
+    return from_candid_variant_n13(_uploadFile, _downloadFile, value);
+}
+function from_candid_UserRole_n16(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserRole): UserRole {
+    return from_candid_variant_n17(_uploadFile, _downloadFile, value);
+}
+function from_candid_opt_n15(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_UserProfile]): UserProfile | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [string]): string | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [Principal]): Principal | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_record_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    id: _PostId;
+    title: string;
+    expiryDate: string;
+    createdAt: bigint;
+    recipientContact: [] | [string];
+    accessCode: [] | [string];
+    description: string;
+    state: string;
+    ngoId: [] | [Principal];
+    pickupTime: string;
+    quantity: bigint;
+    category: _Category;
+    pickupStatus: _PickupStatus;
+    image: string;
+    recipientName: [] | [string];
+    donor: Principal;
+    location: string;
+    recipientId: [] | [Principal];
+    foodType: string;
+}): {
+    id: PostId;
+    title: string;
+    expiryDate: string;
+    createdAt: bigint;
+    recipientContact?: string;
+    accessCode?: string;
+    description: string;
+    state: string;
+    ngoId?: Principal;
+    pickupTime: string;
+    quantity: bigint;
+    category: Category;
+    pickupStatus: PickupStatus;
+    image: string;
+    recipientName?: string;
+    donor: Principal;
+    location: string;
+    recipientId?: Principal;
+    foodType: string;
+} {
+    return {
+        id: value.id,
+        title: value.title,
+        expiryDate: value.expiryDate,
+        createdAt: value.createdAt,
+        recipientContact: record_opt_to_undefined(from_candid_opt_n8(_uploadFile, _downloadFile, value.recipientContact)),
+        accessCode: record_opt_to_undefined(from_candid_opt_n8(_uploadFile, _downloadFile, value.accessCode)),
+        description: value.description,
+        state: value.state,
+        ngoId: record_opt_to_undefined(from_candid_opt_n9(_uploadFile, _downloadFile, value.ngoId)),
+        pickupTime: value.pickupTime,
+        quantity: value.quantity,
+        category: from_candid_Category_n10(_uploadFile, _downloadFile, value.category),
+        pickupStatus: from_candid_PickupStatus_n12(_uploadFile, _downloadFile, value.pickupStatus),
+        image: value.image,
+        recipientName: record_opt_to_undefined(from_candid_opt_n8(_uploadFile, _downloadFile, value.recipientName)),
+        donor: value.donor,
+        location: value.location,
+        recipientId: record_opt_to_undefined(from_candid_opt_n9(_uploadFile, _downloadFile, value.recipientId)),
+        foodType: value.foodType
+    };
+}
+function from_candid_variant_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    preparedMeals: null;
+} | {
+    other: null;
+} | {
+    bakery: null;
+} | {
+    meatFish: null;
+} | {
+    fruitsVegetables: null;
+} | {
+    frozen: null;
+} | {
+    beverages: null;
+} | {
+    dairy: null;
+} | {
+    pantry: null;
+}): Category {
+    return "preparedMeals" in value ? Category.preparedMeals : "other" in value ? Category.other : "bakery" in value ? Category.bakery : "meatFish" in value ? Category.meatFish : "fruitsVegetables" in value ? Category.fruitsVegetables : "frozen" in value ? Category.frozen : "beverages" in value ? Category.beverages : "dairy" in value ? Category.dairy : "pantry" in value ? Category.pantry : value;
+}
+function from_candid_variant_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    booked: null;
+} | {
+    available: null;
+} | {
+    pickedUp: null;
+} | {
+    delivered: null;
+}): PickupStatus {
+    return "booked" in value ? PickupStatus.booked : "available" in value ? PickupStatus.available : "pickedUp" in value ? PickupStatus.pickedUp : "delivered" in value ? PickupStatus.delivered : value;
+}
+function from_candid_variant_n17(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    admin: null;
+} | {
+    user: null;
+} | {
+    guest: null;
+}): UserRole {
+    return "admin" in value ? UserRole.admin : "user" in value ? UserRole.user : "guest" in value ? UserRole.guest : value;
+}
+function from_candid_vec_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_FoodDonationPost>): Array<FoodDonationPost> {
+    return value.map((x)=>from_candid_FoodDonationPost_n6(_uploadFile, _downloadFile, x));
+}
+function to_candid_Category_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Category): _Category {
+    return to_candid_variant_n4(_uploadFile, _downloadFile, value);
+}
+function to_candid_UserRole_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): _UserRole {
+    return to_candid_variant_n2(_uploadFile, _downloadFile, value);
+}
+function to_candid_opt_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Principal | null): [] | [Principal] {
+    return value === null ? candid_none() : candid_some(value);
+}
+function to_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): {
+    admin: null;
+} | {
+    user: null;
+} | {
+    guest: null;
+} {
+    return value == UserRole.admin ? {
+        admin: null
+    } : value == UserRole.user ? {
+        user: null
+    } : value == UserRole.guest ? {
+        guest: null
+    } : value;
+}
+function to_candid_variant_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Category): {
+    preparedMeals: null;
+} | {
+    other: null;
+} | {
+    bakery: null;
+} | {
+    meatFish: null;
+} | {
+    fruitsVegetables: null;
+} | {
+    frozen: null;
+} | {
+    beverages: null;
+} | {
+    dairy: null;
+} | {
+    pantry: null;
+} {
+    return value == Category.preparedMeals ? {
+        preparedMeals: null
+    } : value == Category.other ? {
+        other: null
+    } : value == Category.bakery ? {
+        bakery: null
+    } : value == Category.meatFish ? {
+        meatFish: null
+    } : value == Category.fruitsVegetables ? {
+        fruitsVegetables: null
+    } : value == Category.frozen ? {
+        frozen: null
+    } : value == Category.beverages ? {
+        beverages: null
+    } : value == Category.dairy ? {
+        dairy: null
+    } : value == Category.pantry ? {
+        pantry: null
+    } : value;
 }
 export interface CreateActorOptions {
     agent?: Agent;

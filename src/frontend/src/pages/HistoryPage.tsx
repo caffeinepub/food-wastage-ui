@@ -1,47 +1,47 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { useFoodPostsStore } from '@/state/foodPostsStore';
+import { useGetMyPosts } from '@/hooks/useQueries';
 import { Calendar, Package } from 'lucide-react';
 
 export default function HistoryPage() {
-  const posts = useFoodPostsStore((state) => state.posts);
-  const isHydrated = useFoodPostsStore((state) => state.isHydrated);
+  const { data: posts, isLoading } = useGetMyPosts();
 
-  if (!isHydrated) {
+  if (isLoading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center p-6">
-        <p className="text-neutral-500">Loading...</p>
+        <p className="text-earth-500">Loading...</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4 p-6">
-      <h2 className="text-2xl font-bold text-neutral-800">History</h2>
+    <div className="space-y-5 p-6">
+      <h2 className="text-2xl font-bold text-earth-900">History</h2>
 
-      {posts.length === 0 ? (
-        <Card className="shadow-sm">
+      {!posts || posts.length === 0 ? (
+        <Card className="border-earth-200 bg-card shadow-soft">
           <CardContent className="py-12 text-center">
-            <p className="text-neutral-500">No food posts yet. Add your first donation!</p>
+            <Package className="mx-auto h-16 w-16 text-earth-300" />
+            <p className="mt-4 text-earth-600">No food posts yet. Add your first donation!</p>
           </CardContent>
         </Card>
       ) : (
         <div className="space-y-3">
           {posts.map((post) => (
-            <Card key={post.id} className="shadow-sm transition-shadow hover:shadow-md">
-              <CardContent className="flex items-center justify-between p-4">
+            <Card key={post.id.toString()} className="border-earth-200 bg-card shadow-soft transition-shadow hover:shadow-md">
+              <CardContent className="flex items-center justify-between p-5">
                 <div className="flex-1">
-                  <h3 className="font-semibold text-neutral-800">{post.title}</h3>
-                  <div className="mt-1 flex items-center gap-4 text-sm text-neutral-600">
-                    <span className="flex items-center gap-1">
+                  <h3 className="font-semibold text-earth-900">{post.title}</h3>
+                  <div className="mt-2 flex items-center gap-4 text-sm text-earth-600">
+                    <span className="flex items-center gap-1.5">
                       <Calendar className="h-4 w-4" />
-                      {post.date}
+                      {post.expiryDate}
                     </span>
-                    <span>{post.time}</span>
+                    <span>{post.pickupTime}</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 rounded-full bg-eco-green/10 px-3 py-1">
-                  <Package className="h-4 w-4 text-eco-green" />
-                  <span className="font-semibold text-eco-green">{post.quantity}</span>
+                <div className="flex items-center gap-2 rounded-full bg-leaf/10 px-4 py-2">
+                  <Package className="h-4 w-4 text-leaf" />
+                  <span className="font-semibold text-leaf">{post.quantity.toString()}</span>
                 </div>
               </CardContent>
             </Card>

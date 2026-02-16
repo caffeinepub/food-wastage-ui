@@ -2,31 +2,17 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-make-the-track-button-on-the-ngo-alert-screen-perform-a-real-action-by-navigating-to-a-dedicated-tracking-view-new-route-that-displays-the-current-pickup-tracking-status-for-the-most-recent-food-post",
-      "featureTitle": "Make the 'Track' button on the NGO Alert screen perform a real action by navigating to a dedicated tracking view (new route) that displays the current pickup/tracking status for the most recent food post.",
+      "featureId": "feature-wire-the-frontend-to-use-the-backend-api-via-the-existing-actor-hook-and-react-query-for-adding-and-reading-food-posts-so-history-ngo-alert-and-track-work-after-refresh-and-across-devices",
+      "featureTitle": "Wire the frontend to use the backend API (via the existing actor hook and React Query) for adding and reading food posts, so History, NGO Alert, and Track work after refresh and across devices.",
       "files": [
         "frontend/src/App.tsx",
-        "frontend/src/pages/NgoAlertPage.tsx",
-        "frontend/src/pages/TrackPage.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-persist-the-client-side-food-posts-store-so-that-history-ngo-alert-and-the-new-tracking-view-continue-to-work-after-a-page-refresh-in-the-live-production-environment",
-      "featureTitle": "Persist the client-side food posts store so that History, NGO Alert, and the new tracking view continue to work after a page refresh in the live/production environment.",
-      "files": [
+        "frontend/src/components/add-food/forms/AddFoodCardForm.tsx",
+        "frontend/src/components/add-food/forms/AddFoodDrawerForm.tsx",
+        "frontend/src/components/add-food/forms/AddFoodWizardForm.tsx",
+        "frontend/src/hooks/useQueries.ts",
         "frontend/src/pages/HistoryPage.tsx",
         "frontend/src/pages/NgoAlertPage.tsx",
+        "frontend/src/pages/TrackPage.tsx",
         "frontend/src/state/FoodPostsProvider.tsx",
         "frontend/src/state/foodPostsStore.ts"
       ],
@@ -35,10 +21,61 @@
         "shadcn-ui@1.0.0",
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
       ],
       "testIds": [
         "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-make-the-tracking-view-reflect-real-backend-derived-tracking-status-for-the-most-recent-donation-instead-of-a-hard-coded-step-list-so-tracking-works-reliably-in-live-production",
+      "featureTitle": "Make the tracking view reflect real, backend-derived tracking status for the most recent donation instead of a hard-coded step list, so tracking works reliably in live/production.",
+      "files": [
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/TrackPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-cohesive-distinct-visual-theme-across-the-app-colors-typography-surfaces-to-elevate-perceived-quality-while-keeping-the-existing-information-architecture-and-routes-unchanged",
+      "featureTitle": "Apply a cohesive, distinct visual theme across the app (colors/typography/surfaces) to elevate perceived quality while keeping the existing information architecture and routes unchanged.",
+      "files": [
+        "frontend/src/components/add-food/forms/AddFoodCardForm.tsx",
+        "frontend/src/components/add-food/forms/AddFoodDrawerForm.tsx",
+        "frontend/src/components/add-food/forms/AddFoodWizardForm.tsx",
+        "frontend/src/components/layout/AppShell.tsx",
+        "frontend/src/components/layout/BottomNav.tsx",
+        "frontend/src/index.css",
+        "frontend/src/pages/AddFoodPage.tsx",
+        "frontend/src/pages/HistoryPage.tsx",
+        "frontend/src/pages/HomePage.tsx",
+        "frontend/src/pages/NgoAlertPage.tsx",
+        "frontend/src/pages/TrackPage.tsx",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
       ],
       "confidence": "high"
     }

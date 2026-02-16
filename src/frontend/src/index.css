@@ -4,31 +4,42 @@
 
 @layer base {
   :root {
-    --radius: 0.625rem;
+    --radius: 0.75rem;
     
-    /* Eco-focused green theme */
-    --eco-green: 0.55 0.15 145;
-    --eco-green-dark: 0.45 0.15 145;
+    /* Earth-toned palette for food wastage solution */
+    --leaf: 0.52 0.18 142;
+    --leaf-dark: 0.42 0.18 142;
+    --sand: 0.96 0.02 85;
+    --earth-50: 0.98 0.01 85;
+    --earth-100: 0.95 0.02 85;
+    --earth-200: 0.90 0.02 85;
+    --earth-300: 0.82 0.03 85;
+    --earth-400: 0.68 0.04 85;
+    --earth-500: 0.52 0.05 85;
+    --earth-600: 0.42 0.05 85;
+    --earth-700: 0.32 0.04 85;
+    --earth-800: 0.24 0.03 85;
+    --earth-900: 0.16 0.02 85;
     
-    --background: 0.98 0 0;
-    --foreground: 0.145 0 0;
+    --background: 0.96 0.02 85;
+    --foreground: 0.16 0.02 85;
     --card: 1 0 0;
-    --card-foreground: 0.145 0 0;
+    --card-foreground: 0.16 0.02 85;
     --popover: 1 0 0;
-    --popover-foreground: 0.145 0 0;
-    --primary: 0.55 0.15 145;
+    --popover-foreground: 0.16 0.02 85;
+    --primary: 0.52 0.18 142;
     --primary-foreground: 1 0 0;
-    --secondary: 0.96 0 0;
-    --secondary-foreground: 0.145 0 0;
-    --muted: 0.96 0 0;
-    --muted-foreground: 0.5 0 0;
-    --accent: 0.96 0 0;
-    --accent-foreground: 0.145 0 0;
+    --secondary: 0.95 0.02 85;
+    --secondary-foreground: 0.16 0.02 85;
+    --muted: 0.95 0.02 85;
+    --muted-foreground: 0.52 0.05 85;
+    --accent: 0.90 0.02 85;
+    --accent-foreground: 0.16 0.02 85;
     --destructive: 0.577 0.245 27.325;
     --destructive-foreground: 0.985 0 0;
-    --border: 0.9 0 0;
-    --input: 0.9 0 0;
-    --ring: 0.55 0.15 145;
+    --border: 0.90 0.02 85;
+    --input: 0.90 0.02 85;
+    --ring: 0.52 0.18 142;
     --chart-1: 0.646 0.222 41.116;
     --chart-2: 0.6 0.118 184.704;
     --chart-3: 0.398 0.07 227.392;
@@ -37,25 +48,25 @@
   }
 
   .dark {
-    --background: 0.145 0 0;
-    --foreground: 0.985 0 0;
-    --card: 0.205 0 0;
-    --card-foreground: 0.985 0 0;
-    --popover: 0.269 0 0;
-    --popover-foreground: 0.985 0 0;
-    --primary: 0.65 0.15 145;
-    --primary-foreground: 0.145 0 0;
-    --secondary: 0.269 0 0;
-    --secondary-foreground: 0.985 0 0;
-    --muted: 0.269 0 0;
-    --muted-foreground: 0.708 0 0;
-    --accent: 0.371 0 0;
-    --accent-foreground: 0.985 0 0;
+    --background: 0.16 0.02 85;
+    --foreground: 0.98 0.01 85;
+    --card: 0.20 0.02 85;
+    --card-foreground: 0.98 0.01 85;
+    --popover: 0.24 0.03 85;
+    --popover-foreground: 0.98 0.01 85;
+    --primary: 0.62 0.18 142;
+    --primary-foreground: 0.16 0.02 85;
+    --secondary: 0.24 0.03 85;
+    --secondary-foreground: 0.98 0.01 85;
+    --muted: 0.24 0.03 85;
+    --muted-foreground: 0.68 0.04 85;
+    --accent: 0.32 0.04 85;
+    --accent-foreground: 0.98 0.01 85;
     --destructive: 0.704 0.191 22.216;
-    --destructive-foreground: 0.205 0 0;
+    --destructive-foreground: 0.20 0.02 85;
     --border: 1 0 0 / 10%;
     --input: 1 0 0 / 15%;
-    --ring: 0.65 0.15 145;
+    --ring: 0.62 0.18 142;
     --chart-1: 0.488 0.243 264.376;
     --chart-2: 0.696 0.17 162.48;
     --chart-3: 0.769 0.188 70.08;
@@ -69,24 +80,51 @@
   
   body {
     @apply bg-background text-foreground;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   }
 }
 
 @layer utilities {
-  .bg-eco-green {
-    background-color: oklch(var(--eco-green));
+  .bg-leaf {
+    background-color: oklch(var(--leaf));
   }
   
-  .bg-eco-green-dark {
-    background-color: oklch(var(--eco-green-dark));
+  .bg-leaf-dark {
+    background-color: oklch(var(--leaf-dark));
   }
   
-  .text-eco-green {
-    color: oklch(var(--eco-green));
+  .text-leaf {
+    color: oklch(var(--leaf));
   }
   
-  .border-eco-green {
-    border-color: oklch(var(--eco-green));
+  .border-leaf {
+    border-color: oklch(var(--leaf));
+  }
+  
+  .bg-sand {
+    background-color: oklch(var(--sand));
+  }
+  
+  .text-earth-50 { color: oklch(var(--earth-50)); }
+  .text-earth-100 { color: oklch(var(--earth-100)); }
+  .text-earth-200 { color: oklch(var(--earth-200)); }
+  .text-earth-300 { color: oklch(var(--earth-300)); }
+  .text-earth-400 { color: oklch(var(--earth-400)); }
+  .text-earth-500 { color: oklch(var(--earth-500)); }
+  .text-earth-600 { color: oklch(var(--earth-600)); }
+  .text-earth-700 { color: oklch(var(--earth-700)); }
+  .text-earth-800 { color: oklch(var(--earth-800)); }
+  .text-earth-900 { color: oklch(var(--earth-900)); }
+  
+  .bg-earth-50 { background-color: oklch(var(--earth-50)); }
+  .bg-earth-100 { background-color: oklch(var(--earth-100)); }
+  .bg-earth-200 { background-color: oklch(var(--earth-200)); }
+  .bg-earth-300 { background-color: oklch(var(--earth-300)); }
+  
+  .border-earth-200 { border-color: oklch(var(--earth-200)); }
+  .border-earth-300 { border-color: oklch(var(--earth-300)); }
+  
+  .shadow-soft {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
   }
 }

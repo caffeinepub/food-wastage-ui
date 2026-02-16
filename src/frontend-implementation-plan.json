@@ -1,62 +1,159 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix Track flow with tracking route and persistent food posts (frontend-only)",
+  "title": "Food Wastage UI — Persisted posts, backend-powered tracking, cohesive theme",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Make Track navigate to a dedicated tracking route that shows a clear status timeline and the most recent food post (or an empty state linking to Add Food).",
-      "acceptanceCriteria": [
-        "On /ngo-alert, clicking the 'Track' button navigates to a tracking view (e.g., /track) instead of doing nothing.",
-        "The tracking view renders without errors in production builds and shows a clear status timeline/steps (e.g., 'Request received' -> 'Driver assigned' -> 'On the way' -> 'Arrived').",
-        "If there is a most recent food post, the tracking view includes its title/quantity/date/time; if not, it shows an English empty-state message prompting the user to add a food post first and provides a button to navigate to Add Food"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/TrackPage.tsx",
-          "operation": "create",
-          "description": "Create a new TrackPage that reads the most recent food post from the Zustand store and renders (1) a clear tracking status timeline UI and (2) either the most-recent post details (title/quantity/date/time) or an English empty state with a button that navigates to /add-food. Use shadcn-ui primitives already present in the app (e.g., Button/Card) for consistent styling; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Register a new TanStack Router route for /track that renders TrackPage, and add it into the routeTree so it is reachable via navigation (prevents an orphaned page)."
-        },
-        {
-          "path": "frontend/src/pages/NgoAlertPage.tsx",
-          "operation": "modify",
-          "description": "Wire the existing 'Track' button to navigate to /track on click, ensuring the button performs a real action in production builds. Continue using existing shadcn-ui Button; verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
       "id": "REQ-2",
-      "summary": "Persist food posts in browser storage so History, NGO Alert mostRecent, and Track survive page refresh without backend changes.",
+      "summary": "Replace client-only food post storage with backend-powered React Query hooks for create + list, and wire Add Food/History/NGO Alert/Track to use persisted data.",
       "acceptanceCriteria": [
-        "After posting a food item, refreshing the page keeps the item visible in the History screen.",
-        "After posting a food item, refreshing the page keeps the most recent post available to the NGO Alert screen (mostRecent is not lost due to in-memory reset).",
-        "Persistence uses browser storage only (no external database) and does not require backend changes."
+        "Food submission flows (card/drawer/wizard) create a new post through the backend API and then navigate as they do today",
+        "History page reads posts from the backend and renders the same UI states (loading, empty, populated) without relying on localStorage hydration",
+        "NGO Alert and Track pages use backend data to resolve the 'most recent' donation, including after a hard refresh",
+        "frontend/src/hooks/useQueries.ts is updated to contain React Query hooks for the backend methods (queries + mutation)"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/state/foodPostsStore.ts",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Add browser-storage persistence to the Zustand food posts store (e.g., localStorage-backed persist middleware) so posts rehydrate after refresh in production. Ensure getMostRecent continues to work based on the persisted posts array."
+          "description": "Implement React Query hooks backed by the actor from useActor (from the core-infrastructure component) for creating a post and reading posts (e.g., create mutation, my-posts query, and a derived 'most recent post' query). Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/state/FoodPostsProvider.tsx",
+          "path": "frontend/src/components/add-food/forms/AddFoodCardForm.tsx",
           "operation": "modify",
-          "description": "Update FoodPostsProvider to ensure the persisted store is rehydrated on app load (and optionally expose a simple 'hydrated' guard if needed to avoid transient empty state flashes), without introducing backend dependencies."
+          "description": "Switch submission from Zustand/localStorage to the backend createPost mutation hook (React Query), mapping existing form fields to the backend-required fields and keeping the current navigation behavior. Use existing shadcn-ui form primitives already imported; compose them only. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/add-food/forms/AddFoodDrawerForm.tsx",
+          "operation": "modify",
+          "description": "Switch drawer form submission from Zustand/localStorage to the backend createPost mutation hook (React Query), keeping close + navigation behavior the same and showing basic submitting/error states in English. Use existing shadcn-ui components already imported; compose them only. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/add-food/forms/AddFoodWizardForm.tsx",
+          "operation": "modify",
+          "description": "Switch wizard submission from Zustand/localStorage to the backend createPost mutation hook (React Query), preserving step flow and navigation, and adding basic submitting/error states in English. Use existing shadcn-ui components already imported; compose them only. Verify the component's usage instructions before implementing."
         },
         {
           "path": "frontend/src/pages/HistoryPage.tsx",
           "operation": "modify",
-          "description": "Adjust HistoryPage to remain compatible with persisted/rehydrated state (and any optional hydration guard), so a refresh still shows previously posted items. Continue using existing shadcn-ui Card components; verify the component's usage instructions before implementing."
+          "description": "Replace Zustand hydration-based rendering with a backend-driven posts query (React Query) and keep the same loading/empty/populated UI states using the persisted data. Use existing shadcn-ui Card components already imported; compose them only. Verify the component's usage instructions before implementing."
         },
         {
           "path": "frontend/src/pages/NgoAlertPage.tsx",
           "operation": "modify",
-          "description": "Ensure NGO Alert continues to derive mostRecent from the persisted store after refresh (and any optional hydration guard), so the most recent post is not lost in production."
+          "description": "Replace Zustand 'most recent' lookup with a backend-driven 'most recent post' query and ensure the page still renders meaningful content after refresh (including a clear empty state when there is no donation). Use existing shadcn-ui components already imported; compose them only. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/TrackPage.tsx",
+          "operation": "modify",
+          "description": "Stop relying on Zustand hydration for the donation being tracked; read the most recent donation via backend-driven query hooks so the page works across refresh and devices. Use existing shadcn-ui components already imported; compose them only. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Remove dependency on FoodPostsProvider (localStorage rehydration) now that posts are backend-persisted, keeping the existing routes unchanged. Verify the core-infrastructure component's guidance for actor/query invalidation patterns before implementing."
+        },
+        {
+          "path": "frontend/src/state/FoodPostsProvider.tsx",
+          "operation": "delete",
+          "description": "Delete the localStorage hydration provider since post persistence is handled via backend + React Query (no client-side hydration gate should block History/Track rendering)."
+        },
+        {
+          "path": "frontend/src/state/foodPostsStore.ts",
+          "operation": "delete",
+          "description": "Delete the persisted Zustand store used for food posts to ensure the app no longer relies on localStorage for History/NGO Alert/Track."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Render tracking steps from backend-derived tracking status for the most recent donation, including clear empty/fallback states.",
+      "acceptanceCriteria": [
+        "Backend provides a method to fetch tracking status for the most recent post (or by post id) and returns an ordered list of steps with completion state (or an equivalent status representation)",
+        "Track page renders tracking steps based on backend response and shows an appropriate empty state when no donation exists",
+        "If backend cannot find tracking data for a post, the UI shows a clear fallback state rather than showing hard-coded progress"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add/extend a React Query hook for backend tracking (e.g., getCurrentTracking) and expose a UI-friendly model (ordered steps) plus error/empty handling. Use the existing actor from useActor (core-infrastructure) and React Query patterns. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/TrackPage.tsx",
+          "operation": "modify",
+          "description": "Replace the hard-coded trackingSteps array with rendering driven by the backend tracking query response; show (1) empty donation state when no recent post exists and (2) explicit fallback state when tracking data is missing/unavailable, all in English. Use existing shadcn-ui Cards/Buttons already imported; compose them only. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Apply a cohesive, distinct eco-themed visual system across all existing screens without changing routes or adding features.",
+      "acceptanceCriteria": [
+        "Theme is consistent across Home/Add Food/NGO Alert/History/Track screens (cards, buttons, headings, spacing)",
+        "Do not introduce new product features; only visual/UX polish and consistency changes",
+        "Avoid using a blue/purple primary palette unless explicitly requested"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Refine the global theme tokens (CSS variables) to strengthen a cohesive eco/earth palette (no blue/purple primary), and ensure base typography/surfaces feel consistent across pages. This should align with shadcn-ui theming expectations; verify the shadcn-ui component usage instructions before implementing."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Align Tailwind theme extensions with the refined design tokens (colors/shadows/radius) so all screens can use consistent utility patterns while keeping the existing information architecture intact."
+        },
+        {
+          "path": "frontend/src/components/layout/AppShell.tsx",
+          "operation": "modify",
+          "description": "Polish global layout styling (header surface, spacing, container, background) to match the theme tokens and improve perceived quality while keeping structure and routes unchanged. Verify shadcn-ui composition guidance before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/BottomNav.tsx",
+          "operation": "modify",
+          "description": "Update bottom navigation styling to match the cohesive theme (surfaces, borders, active state, typography) without changing navigation targets. Verify shadcn-ui composition guidance before implementing."
+        },
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Apply consistent page-level typography, spacing, and card/button surfaces to match the refined theme (no new features/routes). Verify shadcn-ui composition guidance before implementing."
+        },
+        {
+          "path": "frontend/src/pages/AddFoodPage.tsx",
+          "operation": "modify",
+          "description": "Ensure tabs/header spacing/typography align with the cohesive theme across the Add Food screen (no new flows). Verify shadcn-ui composition guidance before implementing."
+        },
+        {
+          "path": "frontend/src/components/add-food/forms/AddFoodCardForm.tsx",
+          "operation": "modify",
+          "description": "Polish card form visuals (card surface, input spacing, button consistency) to match theme tokens while preserving current validation and UX. Verify shadcn-ui composition guidance before implementing."
+        },
+        {
+          "path": "frontend/src/components/add-food/forms/AddFoodDrawerForm.tsx",
+          "operation": "modify",
+          "description": "Polish drawer form visuals (sheet content spacing, typography, button styling consistency) to match theme tokens while preserving current UX. Verify shadcn-ui composition guidance before implementing."
+        },
+        {
+          "path": "frontend/src/components/add-food/forms/AddFoodWizardForm.tsx",
+          "operation": "modify",
+          "description": "Polish wizard visuals (step indicator, spacing, card surface, buttons) to match theme tokens while preserving current UX. Verify shadcn-ui composition guidance before implementing."
+        },
+        {
+          "path": "frontend/src/pages/HistoryPage.tsx",
+          "operation": "modify",
+          "description": "Unify History page visual hierarchy (title, empty/loading states, card density) with the app theme while keeping the same page content and route. Verify shadcn-ui composition guidance before implementing."
+        },
+        {
+          "path": "frontend/src/pages/NgoAlertPage.tsx",
+          "operation": "modify",
+          "description": "Unify NGO Alert page surfaces and typography (alert panel, map card, buttons) to match theme tokens while keeping existing information architecture and route. Verify shadcn-ui composition guidance before implementing."
+        },
+        {
+          "path": "frontend/src/pages/TrackPage.tsx",
+          "operation": "modify",
+          "description": "Unify Track page styling (details card, tracking card, empty/fallback states, buttons) to match theme tokens while keeping existing information architecture and route. Verify shadcn-ui composition guidance before implementing."
         }
       ]
     }

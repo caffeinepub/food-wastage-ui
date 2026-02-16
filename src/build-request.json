@@ -1,54 +1,93 @@
 {
   "kind": "build_request",
-  "title": "Fix live tracking flow and persist food posts so Track works in production",
+  "title": "Make the app a real value-based web app with backend persistence",
   "projectName": "Food Wastage UI",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Make the 'Track' button on the NGO Alert screen perform a real action by navigating to a dedicated tracking view (new route) that displays the current pickup/tracking status for the most recent food post.",
-      "target": "frontend",
+      "text": "Implement a Motoko backend data model and API to persist food donation posts so the app is not purely client-side (support creating a post and listing posts for the current caller).",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-6"
         ],
         "quotes": [
-          "track system is not working live"
+          "real value based web"
         ]
       },
       "acceptanceCriteria": [
-        "On /ngo-alert, clicking the 'Track' button navigates to a tracking view (e.g., /track) instead of doing nothing.",
-        "The tracking view renders without errors in production builds and shows a clear status timeline/steps (e.g., 'Request received' -> 'Driver assigned' -> 'On the way' -> 'Arrived').",
-        "If there is a most recent food post, the tracking view includes its title/quantity/date/time; if not, it shows an English empty-state message prompting the user to add a food post first and provides a button to navigate to Add Food."
+        "backend/main.mo defines stable state to store food posts keyed by caller Principal (or equivalent per-user partitioning)",
+        "Backend exposes methods to: create/add a food post, list food posts for the authenticated/anonymous caller, and fetch the most recent post",
+        "Returned food posts include the fields the UI already uses (title, quantity, date, time, timestamp/id)",
+        "Backend compiles and can be called from the generated frontend actor"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Persist the client-side food posts store so that History, NGO Alert, and the new tracking view continue to work after a page refresh in the live/production environment.",
-      "target": "frontend",
+      "text": "Wire the frontend to use the backend API (via the existing actor hook and React Query) for adding and reading food posts, so History, NGO Alert, and Track work after refresh and across devices.",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-6"
         ],
         "quotes": [
-          "track system is not working live"
+          "real value based web"
         ]
       },
       "acceptanceCriteria": [
-        "After posting a food item, refreshing the page keeps the item visible in the History screen.",
-        "After posting a food item, refreshing the page keeps the most recent post available to the NGO Alert screen (mostRecent is not lost due to in-memory reset).",
-        "Persistence uses browser storage only (no external database) and does not require backend changes."
+        "Food submission flows (card/drawer/wizard) create a new post through the backend API and then navigate as they do today",
+        "History page reads posts from the backend and renders the same UI states (loading, empty, populated) without relying on localStorage hydration",
+        "NGO Alert and Track pages use backend data to resolve the 'most recent' donation, including after a hard refresh",
+        "frontend/src/hooks/useQueries.ts is updated to contain React Query hooks for the backend methods (queries + mutation)"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Make the tracking view reflect real, backend-derived tracking status for the most recent donation instead of a hard-coded step list, so tracking works reliably in live/production.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "real value based web"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend provides a method to fetch tracking status for the most recent post (or by post id) and returns an ordered list of steps with completion state (or an equivalent status representation)",
+        "Track page renders tracking steps based on backend response and shows an appropriate empty state when no donation exists",
+        "If backend cannot find tracking data for a post, the UI shows a clear fallback state rather than showing hard-coded progress"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Apply a cohesive, distinct visual theme across the app (colors/typography/surfaces) to elevate perceived quality while keeping the existing information architecture and routes unchanged.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "real value based web"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Theme is consistent across Home/Add Food/NGO Alert/History/Track screens (cards, buttons, headings, spacing)",
+        "Do not introduce new product features; only visual/UX polish and consistency changes",
+        "Avoid using a blue/purple primary palette unless explicitly requested"
       ]
     }
   ],
   "constraints": [
-    "Do not edit files under frontend/src/components/ui (Shadcn components are read-only).",
-    "Do not edit immutable hook files: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx."
+    "Keep all Motoko logic in the single actor at backend/main.mo (no additional backend services).",
+    "Do not edit files under frontend/src/components/ui or any frontend immutablePaths; compose those components instead.",
+    "Use English for all user-facing UI text."
   ],
   "nonGoals": [
-    "Do not implement real GPS, live maps, or real-time vehicle location updates.",
-    "Do not add third-party map integrations or external APIs.",
-    "Do not add non-Internet-Computer authentication providers."
+    "Adding third-party authentication providers (only Internet Identity is allowed).",
+    "Adding external databases or off-chain storage services.",
+    "Real-time tracking updates via websockets/push notifications."
   ],
   "imageRequirements": {
     "required": [],

@@ -3,29 +3,44 @@
   "projectStateVersion": 3,
   "summary": "New project",
   "architectural_notes": [],
-  "known_issues": [
-    "Tracking system is not working in the live/production environment."
-  ],
-  "isFixRequest": true,
+  "known_issues": [],
+  "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-make-the-track-button-on-the-ngo-alert-screen-perform-a-real-action-by-navigating-to-a-dedicated-tracking-view-new-route-that-displays-the-current-pickup-tracking-status-for-the-most-recent-food-post",
-      "title": "Make the 'Track' button on the NGO Alert screen perform a real action by navigating to a dedicated tracking view (new route) that displays the current pickup/tracking status for the most recent food post.",
-      "reqIds": [
-        "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-persist-the-client-side-food-posts-store-so-that-history-ngo-alert-and-the-new-tracking-view-continue-to-work-after-a-page-refresh-in-the-live-production-environment",
-      "title": "Persist the client-side food posts store so that History, NGO Alert, and the new tracking view continue to work after a page refresh in the live/production environment.",
+      "id": "feature-wire-the-frontend-to-use-the-backend-api-via-the-existing-actor-hook-and-react-query-for-adding-and-reading-food-posts-so-history-ngo-alert-and-track-work-after-refresh-and-across-devices",
+      "title": "Wire the frontend to use the backend API (via the existing actor hook and React Query) for adding and reading food posts, so History, NGO Alert, and Track work after refresh and across devices.",
       "reqIds": [
         "REQ-2"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-make-the-tracking-view-reflect-real-backend-derived-tracking-status-for-the-most-recent-donation-instead-of-a-hard-coded-step-list-so-tracking-works-reliably-in-live-production",
+      "title": "Make the tracking view reflect real, backend-derived tracking status for the most recent donation instead of a hard-coded step list, so tracking works reliably in live/production.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-cohesive-distinct-visual-theme-across-the-app-colors-typography-surfaces-to-elevate-perceived-quality-while-keeping-the-existing-information-architecture-and-routes-unchanged",
+      "title": "Apply a cohesive, distinct visual theme across the app (colors/typography/surfaces) to elevate perceived quality while keeping the existing information architecture and routes unchanged.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
     }
   ],
-  "new_feature_requests": [],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Implement a Motoko backend data model and API to persist food donation posts so the app is not purely client-side (support creating a post and listing posts for the current caller).",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    }
+  ],
   "projectName": "Food Wastage UI",
   "clarification_mode": "instant",
   "clarification_rounds": 0

@@ -56,29 +56,32 @@ export default {
                     4: 'oklch(var(--chart-4))',
                     5: 'oklch(var(--chart-5))'
                 },
-                'eco-green': {
-                    DEFAULT: 'oklch(0.55 0.15 145)',
-                    dark: 'oklch(0.45 0.15 145)',
+                leaf: {
+                    DEFAULT: 'oklch(0.52 0.18 142)',
+                    dark: 'oklch(0.42 0.18 142)',
                 },
-                'neutral': {
-                    50: 'oklch(0.98 0 0)',
-                    100: 'oklch(0.96 0 0)',
-                    200: 'oklch(0.92 0 0)',
-                    300: 'oklch(0.85 0 0)',
-                    400: 'oklch(0.7 0 0)',
-                    500: 'oklch(0.55 0 0)',
-                    600: 'oklch(0.45 0 0)',
-                    700: 'oklch(0.35 0 0)',
-                    800: 'oklch(0.25 0 0)',
-                    900: 'oklch(0.15 0 0)',
+                sand: 'oklch(0.96 0.02 85)',
+                earth: {
+                    50: 'oklch(0.98 0.01 85)',
+                    100: 'oklch(0.95 0.02 85)',
+                    200: 'oklch(0.90 0.02 85)',
+                    300: 'oklch(0.82 0.03 85)',
+                    400: 'oklch(0.68 0.04 85)',
+                    500: 'oklch(0.52 0.05 85)',
+                    600: 'oklch(0.42 0.05 85)',
+                    700: 'oklch(0.32 0.04 85)',
+                    800: 'oklch(0.24 0.03 85)',
+                    900: 'oklch(0.16 0.02 85)',
                 },
             },
             borderRadius: {
                 lg: 'var(--radius)',
                 md: 'calc(var(--radius) - 2px)',
-                sm: 'calc(var(--radius) - 4px)'
+                sm: 'calc(var(--radius) - 4px)',
+                xl: '0.875rem',
             },
             boxShadow: {
+                soft: '0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04)',
                 xs: '0 1px 2px 0 rgba(0,0,0,0.05)',
                 sm: '0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1)',
                 md: '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)',
