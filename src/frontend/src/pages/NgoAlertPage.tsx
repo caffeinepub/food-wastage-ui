@@ -32,7 +32,10 @@ export default function NgoAlertPage() {
           </CardContent>
         </Card>
 
-        <Button className="w-full bg-eco-green py-6 text-lg font-semibold text-white hover:bg-eco-green-dark">
+        <Button
+          className="w-full bg-eco-green py-6 text-lg font-semibold text-white hover:bg-eco-green-dark"
+          onClick={() => navigate({ to: '/track' })}
+        >
           <MapPin className="mr-2 h-5 w-5" />
           Track
         </Button>

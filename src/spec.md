@@ -1,14 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Recreate the uploaded Food Wastage Solution mobile UI as a responsive web UI and provide multiple Add Food form layout variations with a simple demo flow.
+**Goal:** Make the NGO “Track” flow work in production by adding a real tracking screen and ensuring food posts persist across page refreshes.
 
 **Planned changes:**
-- Build a mobile-first responsive layout matching the prototype style (green top app bar, light background, rounded cards/shadows, consistent typography) and usable on desktop via a centered max-width container.
-- Implement 4 screens with English UI text and matching structure: Home/Welcome, Add Food, NGO Alert, and History.
-- Add bottom navigation with Home and History tabs with clear active state; provide navigation from Home to Add Food and a simulated flow from posting to NGO Alert.
-- Implement at least 3 switchable Add Food form variations (same fields/actions: Title, Quantity, Date, Time, Post) with minimal required-field validation and inline errors.
-- Add lightweight in-UI demo data: posting adds an item to History; NGO Alert displays a sample alert for the most recent post; map areas are placeholders (no external map services).
-- Add and use required static generated images for food preview and map placeholder cards.
+- Update the /ngo-alert “Track” button to navigate to a new dedicated tracking route/view (e.g., /track).
+- Implement the tracking view UI to show a clear status timeline/steps and display details of the most recent food post when available.
+- Add an English empty state on the tracking view when no food post exists, including a button to navigate to Add Food.
+- Persist the client-side food posts store using browser storage so History, NGO Alert (mostRecent), and the tracking view continue working after refresh (no backend changes).
 
-**User-visible outcome:** Users can navigate between Home and History, open Add Food, switch between multiple form layouts to post an item (with basic validation), see it appear in History, and view an NGO Alert screen with placeholder route/map visuals.
+**User-visible outcome:** Clicking “Track” on the NGO Alert screen opens a tracking page that shows a simple status timeline and the latest food post details; food posts remain available after refreshing the page, and if no post exists the tracking page guides the user to add one.

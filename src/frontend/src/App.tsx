@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import AddFoodPage from './pages/AddFoodPage';
 import NgoAlertPage from './pages/NgoAlertPage';
 import HistoryPage from './pages/HistoryPage';
+import TrackPage from './pages/TrackPage';
 
 const rootRoute = createRootRoute({
   component: AppShell,
@@ -34,7 +35,13 @@ const historyRoute = createRoute({
   component: HistoryPage,
 });
 
-const routeTree = rootRoute.addChildren([homeRoute, addFoodRoute, ngoAlertRoute, historyRoute]);
+const trackRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/track',
+  component: TrackPage,
+});
+
+const routeTree = rootRoute.addChildren([homeRoute, addFoodRoute, ngoAlertRoute, historyRoute, trackRoute]);
 
 const router = createRouter({ routeTree });
 

@@ -4,6 +4,15 @@ import { Calendar, Package } from 'lucide-react';
 
 export default function HistoryPage() {
   const posts = useFoodPostsStore((state) => state.posts);
+  const isHydrated = useFoodPostsStore((state) => state.isHydrated);
+
+  if (!isHydrated) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center p-6">
+        <p className="text-neutral-500">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4 p-6">

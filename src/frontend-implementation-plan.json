@@ -1,243 +1,62 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Food Wastage UI — Responsive prototype recreation with Add Food form variations",
+  "title": "Fix Track flow with tracking route and persistent food posts (frontend-only)",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Recreate the prototype’s overall responsive shell (green app bar, light content area, rounded cards, bottom navigation with Home/History).",
+      "summary": "Make Track navigate to a dedicated tracking route that shows a clear status timeline and the most recent food post (or an empty state linking to Add Food).",
       "acceptanceCriteria": [
-        "UI includes a green header/app bar area similar to the screenshots (title aligned left or centered depending on screen).",
-        "UI includes a bottom navigation bar with Home and History tabs and clear active state styling.",
-        "Layouts look mobile-first and remain usable on desktop (centered phone-width container or responsive max width)."
+        "On /ngo-alert, clicking the 'Track' button navigates to a tracking view (e.g., /track) instead of doing nothing.",
+        "The tracking view renders without errors in production builds and shows a clear status timeline/steps (e.g., 'Request received' -> 'Driver assigned' -> 'On the way' -> 'Arrived').",
+        "If there is a most recent food post, the tracking view includes its title/quantity/date/time; if not, it shows an English empty-state message prompting the user to add a food post first and provides a button to navigate to Add Food"
       ],
       "file_operations": [
         {
+          "path": "frontend/src/pages/TrackPage.tsx",
+          "operation": "create",
+          "description": "Create a new TrackPage that reads the most recent food post from the Zustand store and renders (1) a clear tracking status timeline UI and (2) either the most-recent post details (title/quantity/date/time) or an English empty state with a button that navigates to /add-food. Use shadcn-ui primitives already present in the app (e.g., Button/Card) for consistent styling; verify the component's usage instructions before implementing."
+        },
+        {
           "path": "frontend/src/App.tsx",
-          "operation": "create",
-          "description": "Create the app root with a mobile-first layout wrapper (centered max-width container), top app bar, and persistent bottom navigation (Home/History) with clear active state; wire in routing to required screens. Use shadcn-ui primitives (e.g., navigation buttons, layout containers) where appropriate—verify the component's usage instructions before implementing."
+          "operation": "modify",
+          "description": "Register a new TanStack Router route for /track that renders TrackPage, and add it into the routeTree so it is reachable via navigation (prevents an orphaned page)."
         },
         {
-          "path": "frontend/src/components/layout/AppShell.tsx",
-          "operation": "create",
-          "description": "Implement a reusable layout component that renders the green header/app bar, scrollable content area, and fixed bottom navigation; ensure spacing so content isn’t hidden behind the bottom bar. Use shadcn-ui Button (and related components) for consistent interactions—verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/layout/BottomNav.tsx",
-          "operation": "create",
-          "description": "Create the bottom navigation with Home and History tabs, including icon + label styling and active state visuals matching the prototype. Use shadcn-ui Button for tab actions—verify the component's usage instructions before implementing."
+          "path": "frontend/src/pages/NgoAlertPage.tsx",
+          "operation": "modify",
+          "description": "Wire the existing 'Track' button to navigate to /track on click, ensuring the button performs a real action in production builds. Continue using existing shadcn-ui Button; verify the component's usage instructions before implementing."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Implement the four screens (Home, Add Food, NGO Alert, History) and the prototype navigation flow between them.",
+      "summary": "Persist food posts in browser storage so History, NGO Alert mostRecent, and Track survive page refresh without backend changes.",
       "acceptanceCriteria": [
-        "Home screen shows: header 'Food Wastage Solution', 'Welcome, user!' and an 'Add Food' button, plus a 'Nearby NGOs' section with a map preview card.",
-        "Add Food screen shows: header 'Add Food', an image area, labeled inputs for Title, Quantity, Date, Time, and a prominent 'Post' button.",
-        "NGO Alert screen shows: header 'NGO Alert', a bold alert headline (e.g., 'Food donation received'), a short message, a map/route preview, and a 'Track' button.",
-        "History screen shows: header 'History' and a vertical list of items (e.g., Leftover pasta/Salad/Rice) with date/time and quantity aligned similarly to the screenshot.",
-        "Navigating via bottom tabs switches between Home and History; Home provides a way to reach Add Food; Add Food can navigate to NGO Alert after posting (UI flow can be simulated)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/HomePage.tsx",
-          "operation": "create",
-          "description": "Build the Home/Welcome screen structure and English text: title 'Food Wastage Solution', welcome message, 'Add Food' CTA, and 'Nearby NGOs' map preview card placeholder. Use shadcn-ui Card/Button for the CTA and card styling—verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/AddFoodPage.tsx",
-          "operation": "create",
-          "description": "Build the Add Food screen base layout with header 'Add Food', image preview area, shared field model (Title, Quantity, Date, Time), and a prominent 'Post' action that can route to NGO Alert after submit. Use shadcn-ui Input/Button/Card to match prototype form styling—verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/NgoAlertPage.tsx",
-          "operation": "create",
-          "description": "Build the NGO Alert screen layout with header 'NGO Alert', bold alert headline, message text, route/map preview placeholder, and 'Track' button (demo-only). Use shadcn-ui Card/Button for consistent styling—verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/HistoryPage.tsx",
-          "operation": "create",
-          "description": "Build the History screen with header 'History' and a vertical list of posted items showing title, date/time, and quantity aligned similarly to the prototype. Use shadcn-ui Card (or List-like composition) to create rounded item rows—verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Wire new pages into the app’s router and navigation: bottom tabs switch between Home and History; Home CTA navigates to Add Food; Add Food submit navigates to NGO Alert; ensure no extra top-level routes beyond the required screens."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Provide multiple Add Food form variations (at least 3) with a UI control to switch between them and minimal validation.",
-      "acceptanceCriteria": [
-        "At least 3 distinct Add Food form variations are available (e.g., single-page card form, multi-step wizard, and modal/drawer form), each containing Title, Quantity, Date, Time, and Submit/Post action.",
-        "A clear control (tabs/segmented control/dropdown) lets users switch between the form variations on the Add Food page.",
-        "All variations validate required fields at least minimally (e.g., empty Title/Quantity prevents submit and shows an inline error)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/add-food/AddFoodFormSwitcher.tsx",
-          "operation": "create",
-          "description": "Create the variation switch control for Add Food (e.g., tabs/segmented control) and render the currently selected variation. Use shadcn-ui Tabs (or equivalent) to provide the switcher UI—verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/add-food/forms/AddFoodCardForm.tsx",
-          "operation": "create",
-          "description": "Implement variation 1: single-page card form layout with labeled inputs (Title, Quantity, Date, Time) and a 'Post' button, matching prototype spacing and rounded inputs. Use shadcn-ui Input/Button/Card—verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/add-food/forms/AddFoodWizardForm.tsx",
-          "operation": "create",
-          "description": "Implement variation 2: multi-step wizard (e.g., Step 1: Title/Quantity, Step 2: Date/Time) with Back/Next and final Post; include inline validation per step. Use shadcn-ui Button and progress/step styling via composition—verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/add-food/forms/AddFoodModalOrDrawerForm.tsx",
-          "operation": "create",
-          "description": "Implement variation 3: modal or drawer-based form that opens from the Add Food page, contains the same fields and Post action, and validates required fields. Use shadcn-ui Dialog or Sheet to provide modal/drawer behavior—verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/add-food/useAddFoodValidation.ts",
-          "operation": "create",
-          "description": "Create a small shared validation/helper hook for the required fields (Title, Quantity, Date, Time) and consistent inline error messages across all variations."
-        },
-        {
-          "path": "frontend/src/pages/AddFoodPage.tsx",
-          "operation": "modify",
-          "description": "Integrate the form switcher and all three variations into the Add Food page, ensuring the user can switch variations and still submit the same underlying data."
-        }
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "summary": "Add a lightweight client-side demo data model: posting adds to History and drives NGO Alert for most recent post (no real maps).",
-      "acceptanceCriteria": [
-        "Submitting any Add Food variation adds an item to the History list (with title, date/time, quantity).",
-        "After posting, the app can show an NGO Alert screen for the most recent post (static demo message is acceptable).",
-        "No external map services are used; map sections are placeholders that still match the prototype layout."
+        "After posting a food item, refreshing the page keeps the item visible in the History screen.",
+        "After posting a food item, refreshing the page keeps the most recent post available to the NGO Alert screen (mostRecent is not lost due to in-memory reset).",
+        "Persistence uses browser storage only (no external database) and does not require backend changes."
       ],
       "file_operations": [
         {
           "path": "frontend/src/state/foodPostsStore.ts",
-          "operation": "create",
-          "description": "Create a small client-side store/context to hold posted food items in memory for the demo (add item, read list, read most recent)."
+          "operation": "modify",
+          "description": "Add browser-storage persistence to the Zustand food posts store (e.g., localStorage-backed persist middleware) so posts rehydrate after refresh in production. Ensure getMostRecent continues to work based on the persisted posts array."
         },
         {
           "path": "frontend/src/state/FoodPostsProvider.tsx",
-          "operation": "create",
-          "description": "Provide a React context/provider wrapping the app so Home/Add Food/History/NGO Alert can share demo data without a backend."
-        },
-        {
-          "path": "frontend/src/pages/AddFoodPage.tsx",
           "operation": "modify",
-          "description": "On successful validation + submit in any variation, add the new post to the demo store and navigate to the NGO Alert screen (simulated flow)."
+          "description": "Update FoodPostsProvider to ensure the persisted store is rehydrated on app load (and optionally expose a simple 'hydrated' guard if needed to avoid transient empty state flashes), without introducing backend dependencies."
         },
         {
           "path": "frontend/src/pages/HistoryPage.tsx",
           "operation": "modify",
-          "description": "Read demo posts from the store and render them in the History list with title, date/time, and quantity."
+          "description": "Adjust HistoryPage to remain compatible with persisted/rehydrated state (and any optional hydration guard), so a refresh still shows previously posted items. Continue using existing shadcn-ui Card components; verify the component's usage instructions before implementing."
         },
         {
           "path": "frontend/src/pages/NgoAlertPage.tsx",
           "operation": "modify",
-          "description": "Read the most recent demo post (if present) and display a sample alert message referencing it; keep map/route area as a static placeholder image (no external services)."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Wrap the routed UI with FoodPostsProvider so all required screens share the same demo data model."
-        }
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "summary": "Apply a consistent eco-focused theme (green primary, neutral background, rounded corners, subtle shadows, consistent typography) across all screens.",
-      "acceptanceCriteria": [
-        "Primary UI color is green and consistently applied to headers and primary buttons.",
-        "Cards, lists, and inputs use consistent spacing, border radius, and shadow across pages.",
-        "Typography hierarchy is consistent (screen title > section title > body text)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/index.css",
-          "operation": "create",
-          "description": "Create global styles and theme tokens (CSS variables used by Tailwind/shadcn-ui) to set green primary, neutral background, and consistent radius/shadows; ensure typography defaults are simple and consistent across screens. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/layout/AppShell.tsx",
-          "operation": "modify",
-          "description": "Ensure the header/app bar and primary CTAs consistently use the green primary color and match the prototype’s spacing and rounded styling. Use shadcn-ui components for consistent styling where applicable—verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/HomePage.tsx",
-          "operation": "modify",
-          "description": "Align Home screen typography hierarchy, card styling, and spacing to the eco theme (rounded cards, subtle shadows, neutral background). Use shadcn-ui Card/Button—verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/AddFoodPage.tsx",
-          "operation": "modify",
-          "description": "Align Add Food screen visuals (inputs/cards/button prominence) to the eco theme and keep consistent spacing across variations. Use shadcn-ui Input/Button/Card—verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/HistoryPage.tsx",
-          "operation": "modify",
-          "description": "Align History list item rows/cards with consistent radius, shadow, and typography to match the prototype. Use shadcn-ui Card—verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/NgoAlertPage.tsx",
-          "operation": "modify",
-          "description": "Align NGO Alert screen typography and card/button styling to the eco theme; ensure 'Track' is clearly a primary action. Use shadcn-ui Button/Card—verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "summary": "Add required generated images as static assets and use them for the food preview and map placeholders in the UI.",
-      "acceptanceCriteria": [
-        "All images listed in imageRequirements.required exist under frontend/public/assets/generated.",
-        "Add Food uses the provided food placeholder image in the image preview area.",
-        "Home and NGO Alert screens use the provided map placeholder images in their map preview areas."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/public/assets/generated/map-placeholder-home.dim_900x600.png",
-          "operation": "create",
-          "description": "Add the required generated asset: Minimal map placeholder card background with faint streets and two red location pins."
-        },
-        {
-          "path": "frontend/public/assets/generated/map-placeholder-route.dim_900x600.png",
-          "operation": "create",
-          "description": "Add the required generated asset: Minimal map placeholder with a curved route line between two pins."
-        },
-        {
-          "path": "frontend/public/assets/generated/food-placeholder.dim_900x600.png",
-          "operation": "create",
-          "description": "Add the required generated asset: Food bowl/plate photo-style placeholder on neutral background."
-        },
-        {
-          "path": "frontend/public/assets/generated/app-logo.dim_512x512.png",
-          "operation": "create",
-          "description": "Add the required generated asset: Simple eco/leaf app logo icon, flat style, green tones."
-        },
-        {
-          "path": "frontend/src/pages/HomePage.tsx",
-          "operation": "modify",
-          "description": "Wire the static map image frontend/public/assets/generated/map-placeholder-home.dim_900x600.png into the 'Nearby NGOs' preview card area; keep it as a placeholder (no external map services)."
-        },
-        {
-          "path": "frontend/src/pages/AddFoodPage.tsx",
-          "operation": "modify",
-          "description": "Wire the static food image frontend/public/assets/generated/food-placeholder.dim_900x600.png into the image preview area at the top of the Add Food screen."
-        },
-        {
-          "path": "frontend/src/pages/NgoAlertPage.tsx",
-          "operation": "modify",
-          "description": "Wire the static route/map image frontend/public/assets/generated/map-placeholder-route.dim_900x600.png into the NGO Alert map/route preview area; keep it as a placeholder (no external map services)."
-        },
-        {
-          "path": "frontend/src/components/layout/AppShell.tsx",
-          "operation": "modify",
-          "description": "Use the static logo frontend/public/assets/generated/app-logo.dim_512x512.png in the header/app bar (e.g., alongside the title) to match eco branding."
+          "description": "Ensure NGO Alert continues to derive mostRecent from the persisted store after refresh (and any optional hydration guard), so the most recent post is not lost in production."
         }
       ]
     }
