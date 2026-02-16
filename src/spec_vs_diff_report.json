@@ -1,0 +1,69 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-16T17:07:31.687Z",
+  "summary": "The diff implements the requested mobile-first UI shell (green header, bottom nav), the four screens (Home, Add Food, NGO Alert, History), three Add Food form variations with minimal validation, and a demo client-side data model that posts to History and drives the NGO Alert message/map placeholders. The diff also adds unrelated Internet Identity/auth actor plumbing and an empty backend canister actor, which were not requested by the BuildRequest.",
+  "missing_requirements": [],
+  "hallucinated_features": [
+    {
+      "description": "Internet Identity authentication context/provider and related login/identity management hook implementation",
+      "reason": "BuildRequest non-goals explicitly avoid third-party auth beyond Internet Identity, but it did not request implementing/auth wiring for Internet Identity as part of recreating the UI; the diff adds a full Internet Identity provider and related logic.",
+      "evidence": [
+        "frontend/src/main.tsx",
+        "frontend/src/hooks/useInternetIdentity.ts"
+      ]
+    },
+    {
+      "description": "Actor creation hook and React Query-based actor caching/invalidation logic for backend calls",
+      "reason": "BuildRequest focuses on UI screens and client-side demo data; it does not request setting up canister actor hooks or react-query-based actor/query invalidation.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/main.tsx"
+      ]
+    },
+    {
+      "description": "Creation of an empty Motoko backend canister actor",
+      "reason": "BuildRequest is entirely frontend/UI-focused with a lightweight demo model; no backend canister implementation was requested.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "FoodPostsProvider component that currently provides no state/context",
+      "reason": "BuildRequest requires a demo data model; the actual model is implemented via Zustand store. This additional provider wrapper is not requested and is effectively a no-op.",
+      "evidence": [
+        "frontend/src/state/FoodPostsProvider.tsx",
+        "frontend/src/App.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.74,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/add-food/forms/AddFoodCardForm.tsx",
+    "frontend/src/components/add-food/forms/AddFoodDrawerForm.tsx",
+    "frontend/src/components/add-food/forms/AddFoodWizardForm.tsx",
+    "frontend/src/components/add-food/useAddFoodValidation.ts",
+    "frontend/src/components/layout/AppShell.tsx",
+    "frontend/src/components/layout/BottomNav.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/AddFoodPage.tsx",
+    "frontend/src/pages/HistoryPage.tsx",
+    "frontend/src/pages/HomePage.tsx",
+    "frontend/src/pages/NgoAlertPage.tsx",
+    "frontend/src/state/FoodPostsProvider.tsx",
+    "frontend/src/state/foodPostsStore.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

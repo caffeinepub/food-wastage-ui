@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "New project",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Minimal map placeholder card background with faint streets and two red location pins (map-placeholder-home.dim_900x600.png)\n- Minimal map placeholder with a curved route line between two pins (map-placeholder-route.dim_900x600.png)\n- Food bowl/plate photo-style placeholder on neutral background (food-placeholder.dim_900x600.png)\n- Simple eco/leaf app logo icon, flat style, green tones (app-logo.dim_512x512.png)",
+  "existing_features": [
+    {
+      "id": "feature-recreate-the-mobile-app-ui-shown-in-the-uploaded-prototype-images-as-a-responsive-web-ui-matching-the-overall-layout-and-components-green-top-app-bar-light-content-area-rounded-cards-and-a-bottom-navigation-with-tabs-for-home-and-history",
+      "title": "Recreate the mobile app UI shown in the uploaded prototype images as a responsive web UI, matching the overall layout and components: green top app bar, light content area, rounded cards, and a bottom navigation with tabs for Home and History.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-four-primary-screens-depicted-in-the-images-with-matching-structure-and-english-ui-text-1-home-welcome-with-food-wastage-solution-welcome-message-add-food-cta-and-a-nearby-ngos-map-preview-card-2-add-food-screen-with-image-preview-and-fields-for-title-quantity-date-time-and-a-post-button-3-ngo-alert-screen-with-alert-text-map-route-preview-and-a-track-button-4-history-screen-listing-posted-items-with-date-time-and-quantity-plus-bottom-navigation",
+      "title": "Implement the four primary screens depicted in the images with matching structure and English UI text: (1) Home/Welcome with 'Food Wastage Solution', welcome message, 'Add Food' CTA, and a 'Nearby NGOs' map preview card; (2) Add Food screen with image preview and fields for Title, Quantity, Date, Time, and a 'Post' button; (3) NGO Alert screen with alert text, map/route preview, and a 'Track' button; (4) History screen listing posted items with date/time and quantity, plus bottom navigation.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-the-add-food-functionality-ui-in-multiple-different-form-variations-different-forms-layouts-while-keeping-the-same-fields-and-actions-and-allow-the-user-to-switch-between-them-in-the-ui",
+      "title": "Provide the 'Add Food' functionality UI in multiple different form variations (different forms/layouts) while keeping the same fields and actions, and allow the user to switch between them in the UI.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-lightweight-demo-data-model-in-the-ui-so-that-posting-a-food-item-adds-it-to-history-and-the-ngo-alert-screen-can-display-a-sample-alert-for-the-most-recent-post-no-real-maps-gps-required",
+      "title": "Implement a lightweight demo data model in the UI so that posting a food item adds it to History, and the NGO Alert screen can display a sample alert for the most recent post (no real maps/GPS required).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-coherent-eco-focused-visual-theme-consistent-with-the-prototype-green-primary-color-neutral-background-simple-typography-and-subtle-shadows-rounded-corners-keep-the-style-consistent-across-all-screens-avoid-blue-purple-as-primary-colors",
+      "title": "Apply a coherent, eco-focused visual theme consistent with the prototype: green primary color, neutral background, simple typography, and subtle shadows/rounded corners; keep the style consistent across all screens (avoid blue/purple as primary colors).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-the-required-generated-images-as-static-assets-under-frontend-public-assets-generated-and-use-them-in-the-ui-where-the-prototype-shows-an-image-preview-and-map-placeholders",
+      "title": "Add the required generated images as static assets under frontend/public/assets/generated and use them in the UI where the prototype shows an image preview and map placeholders.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Recreate the referenced UI and provide it in different form variations/layouts",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Food Wastage UI",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

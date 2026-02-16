@@ -1,0 +1,138 @@
+{
+  "kind": "build_request",
+  "title": "Recreate uploaded mobile UI with multiple form layout variations",
+  "projectName": "Food Wastage UI",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Recreate the mobile app UI shown in the uploaded prototype images as a responsive web UI, matching the overall layout and components: green top app bar, light content area, rounded cards, and a bottom navigation with tabs for Home and History.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Make same as this ui and give in different forms"
+        ]
+      },
+      "acceptanceCriteria": [
+        "UI includes a green header/app bar area similar to the screenshots (title aligned left or centered depending on screen).",
+        "UI includes a bottom navigation bar with Home and History tabs and clear active state styling.",
+        "Layouts look mobile-first and remain usable on desktop (centered phone-width container or responsive max width)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement the four primary screens depicted in the images with matching structure and English UI text: (1) Home/Welcome with 'Food Wastage Solution', welcome message, 'Add Food' CTA, and a 'Nearby NGOs' map preview card; (2) Add Food screen with image preview and fields for Title, Quantity, Date, Time, and a 'Post' button; (3) NGO Alert screen with alert text, map/route preview, and a 'Track' button; (4) History screen listing posted items with date/time and quantity, plus bottom navigation.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Make same as this ui and give in different forms"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Home screen shows: header 'Food Wastage Solution', 'Welcome, user!' and an 'Add Food' button, plus a 'Nearby NGOs' section with a map preview card.",
+        "Add Food screen shows: header 'Add Food', an image area, labeled inputs for Title, Quantity, Date, Time, and a prominent 'Post' button.",
+        "NGO Alert screen shows: header 'NGO Alert', a bold alert headline (e.g., 'Food donation received'), a short message, a map/route preview, and a 'Track' button.",
+        "History screen shows: header 'History' and a vertical list of items (e.g., Leftover pasta/Salad/Rice) with date/time and quantity aligned similarly to the screenshot.",
+        "Navigating via bottom tabs switches between Home and History; Home provides a way to reach Add Food; Add Food can navigate to NGO Alert after posting (UI flow can be simulated)."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Provide the 'Add Food' functionality UI in multiple different form variations (different forms/layouts) while keeping the same fields and actions, and allow the user to switch between them in the UI.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "give in different forms"
+        ]
+      },
+      "acceptanceCriteria": [
+        "At least 3 distinct Add Food form variations are available (e.g., single-page card form, multi-step wizard, and modal/drawer form), each containing Title, Quantity, Date, Time, and Submit/Post action.",
+        "A clear control (tabs/segmented control/dropdown) lets users switch between the form variations on the Add Food page.",
+        "All variations validate required fields at least minimally (e.g., empty Title/Quantity prevents submit and shows an inline error)."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Implement a lightweight demo data model in the UI so that posting a food item adds it to History, and the NGO Alert screen can display a sample alert for the most recent post (no real maps/GPS required).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Make same as this ui"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Submitting any Add Food variation adds an item to the History list (with title, date/time, quantity).",
+        "After posting, the app can show an NGO Alert screen for the most recent post (static demo message is acceptable).",
+        "No external map services are used; map sections are placeholders that still match the prototype layout."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Apply a coherent, eco-focused visual theme consistent with the prototype: green primary color, neutral background, simple typography, and subtle shadows/rounded corners; keep the style consistent across all screens (avoid blue/purple as primary colors).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Make same as this ui"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Primary UI color is green and consistently applied to headers and primary buttons.",
+        "Cards, lists, and inputs use consistent spacing, border radius, and shadow across pages.",
+        "Typography hierarchy is consistent (screen title > section title > body text)."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Add the required generated images as static assets under frontend/public/assets/generated and use them in the UI where the prototype shows an image preview and map placeholders.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Make same as this ui"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All images listed in imageRequirements.required exist under frontend/public/assets/generated.",
+        "Add Food uses the provided food placeholder image in the image preview area.",
+        "Home and NGO Alert screens use the provided map placeholder images in their map preview areas."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not edit files under frontend/src/components/ui or other frontend immutable paths; compose them from app code instead.",
+    "Do not use external map/GPS/location services; map areas must be placeholders.",
+    "Use English for all user-facing UI text."
+  ],
+  "nonGoals": [
+    "Implementing real NGO discovery based on geolocation.",
+    "Integrating third-party authentication beyond Internet Identity.",
+    "Real-time tracking, WebSockets, or push notifications.",
+    "Pixel-perfect recreation of device frames shown in the photos; only the app UI inside the frames must be recreated."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Minimal map placeholder card background with faint streets and two red location pins (map-placeholder-home.dim_900x600.png)",
+      "Minimal map placeholder with a curved route line between two pins (map-placeholder-route.dim_900x600.png)",
+      "Food bowl/plate photo-style placeholder on neutral background (food-placeholder.dim_900x600.png)",
+      "Simple eco/leaf app logo icon, flat style, green tones (app-logo.dim_512x512.png)"
+    ],
+    "edits": []
+  }
+}
